@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Typography, CircularProgress } from "@mui/material";
-import ModalComponent from "./ModalComponent"; // Ajuste o caminho conforme necessário
+import ModalComponent from "../Components/modalComponent"; // Ajuste o caminho conforme necessário
 
 function Profile() {
   const [users, setUsers] = useState([]);
@@ -46,8 +46,8 @@ function Profile() {
 
   return (
     <div>
-      <Typography variant="h1">Login realizado com sucesso</Typography>
       <ModalComponent />
+      <Typography variant="h1">Login realizado com sucesso</Typography>
     </div>
   );
 }

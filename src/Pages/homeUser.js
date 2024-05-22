@@ -5,6 +5,7 @@ import {
   CircularProgress
 } from "@mui/material";
 
+import ModalComponent from "../Components/modalComponent"; 
 function Profile() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,10 @@ function Profile() {
   }
 
   return (
+    <div>
+    <ModalComponent />
     <h1>usuario autorizado</h1>
+    </div>
   );
 }
 
