@@ -8,9 +8,11 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: '#caf0f8', // Cor de fundo
   boxShadow: 24,
   p: 4,
+  borderRadius: '35px', // Bordas achei mais estético colcoar bordas arredondadas
+  textAlign: 'center', // Centralizar conteúdo, achei viável centralizar
 };
 
 function ModalComponent() {
@@ -118,8 +120,8 @@ function ModalComponent() {
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-title"
-        aria-describedby="modal-description" // Criando o botão 
-      > 
+        aria-describedby="modal-description"
+      >
         <Box sx={style}>
           <Typography id="modal-title" variant="h6" component="h2">
             Perfil do Anckier
@@ -133,9 +135,14 @@ function ModalComponent() {
             onChange={handleChange}
             fullWidth
             margin="normal"
-            disabled={!editMode} // Campo nome + edit
-          /> 
-        
+            disabled={!editMode}
+            sx={{
+              '& .MuiInputBase-root': {
+                bgcolor: 'rgba(255, 255, 255, 0.7)', // Fundo transparente
+                borderRadius: '8px',
+              },
+            }}
+          />
           <TextField
             label="E-mail"
             name="email"
@@ -143,17 +150,28 @@ function ModalComponent() {
             onChange={handleChange}
             fullWidth
             margin="normal"
-            disabled// Campo email + edit
+            disabled
+            sx={{
+              '& .MuiInputBase-root': {
+                bgcolor: 'rgba(255, 255, 255, 0.7)', // Fundo transparente
+                borderRadius: '8px',
+              },
+            }}
           />
           <TextField
             label="Senha"
             name="password"
             type="password"
-            //value={editMode ? editedUser.password : user.password}
             onChange={handleChange}
             fullWidth
             margin="normal"
-            disabled={!editMode} // Campo senha + edit, notem que o tipo é password para ficar *****
+            disabled={!editMode}
+            sx={{
+              '& .MuiInputBase-root': {
+                bgcolor: 'rgba(255, 255, 255, 0.7)', // Fundo das box de texto transparente para não ficar feio.
+                borderRadius: '10px',
+              },
+            }}
           />
           {!editMode ? (
             <Button 
@@ -163,7 +181,7 @@ function ModalComponent() {
               sx={{ mt: 2, mr: 2 }}
             >
               Editar
-            </Button> // botao editar by jhon
+            </Button>
           ) : (
             <Button 
               onClick={handleSave} 
@@ -172,7 +190,7 @@ function ModalComponent() {
               sx={{ mt: 2, mr: 2 }}
             >
               Salvar
-            </Button> // botao salvar 
+            </Button>
           )}
           <Button 
             onClick={handleClose} 
