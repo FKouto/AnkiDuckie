@@ -28,7 +28,7 @@ const cards = [
   { component: CardVermelho, className: "Card-Column-1" },
 ];
 
-export default function Home() {
+export default function Landing() {
   return (
     <Box component="main" sx={{ height: "100%" }}>
       {/* Header */}
