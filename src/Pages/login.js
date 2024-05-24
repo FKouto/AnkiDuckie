@@ -66,7 +66,7 @@ function Login() {
       if (token) {
         localStorage.setItem("token", token);
         console.log("Token armazenado:", localStorage.getItem("token"));
-        navigate("/homeuser");
+        navigate("/home");
       } else {
         throw new Error("Token não encontrado na resposta");
       }
