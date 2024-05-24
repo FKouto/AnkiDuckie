@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Typography,
-  CircularProgress
-} from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 
-import ModalComponent from "../Components/modalComponent"; 
+import ModalComponent from "../Components/modalComponent";
+import CardComponent from "../Components/cardComponent";
 function Profile() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,16 +14,16 @@ function Profile() {
       try {
         // Recupera o token do localStorage
         const token = localStorage.getItem("token");
-        
+
         // Configura o cabeçalho da requisição com o token
         const config = {
           headers: {
-            Authorization: `Bearer ${token}` // Token deve ser enviado como Bearer token
-          }
+            Authorization: `Bearer ${token}`, // Token deve ser enviado como Bearer token
+          },
         };
 
         const response = await axios.get("http://localhost:8080/user", config);
-        
+
         setUsers(response.data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
@@ -51,8 +49,9 @@ function Profile() {
 
   return (
     <div>
-    <ModalComponent />
-    <h1>usuario autorizado</h1>
+      <ModalComponent />
+      <h1>usuario autorizado</h1>
+      <CardComponent />
     </div>
   );
 }

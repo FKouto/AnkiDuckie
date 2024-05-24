@@ -1,5 +1,3 @@
-import * as React from "react";
-
 // Importando o componente do cabeçalho da página inicial
 import HeaderHome from "../Components/header";
 
