@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Typography, CircularProgress } from "@mui/material";
-import Box from "@mui/material/Box"
+import Box from "@mui/material/Box";
 import ModalComponent from "../Components/modalComponent";
 import CardComponent from "../Components/cardComponent";
 
-function Profile() {
+export default function Home() {
   const [users, setUsers] = useState([]);
   const [deckSummary, setDeckSummary] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,12 +75,10 @@ function Profile() {
   }
 
   return (
-    <Box sx={{padding: ".5rem"}}>
+    <Box sx={{ padding: ".5rem" }}>
       <ModalComponent />
       <h1>usuario autorizado</h1>
       <CardComponent deckSummary={deckSummary} />
     </Box>
   );
 }
-
-export default Profile;
