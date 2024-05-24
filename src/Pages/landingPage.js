@@ -20,12 +20,12 @@ import {
 
 // Array de objetos contendo os componentes dos cards e suas respectivas classes CSS
 const cards = [
-  { component: CardAzul, className: "Card-Column-1" },
-  { component: CardLaranja, className: "Card-Column-1" },
-  { component: CardRosa, className: "Card-Column-1" },
-  { component: CardRoxo, className: "Card-Column-1" },
-  { component: CardVerde, className: "Card-Column-1" },
-  { component: CardVermelho, className: "Card-Column-1" },
+  { Component: CardAzul, className: "Card-Column-1" },
+  { Component: CardLaranja, className: "Card-Column-1" },
+  { Component: CardRosa, className: "Card-Column-1" },
+  { Component: CardRoxo, className: "Card-Column-1" },
+  { Component: CardVerde, className: "Card-Column-1" },
+  { Component: CardVermelho, className: "Card-Column-1" },
 ];
 
 export default function Landing() {
@@ -80,7 +80,7 @@ export default function Landing() {
               gap: ".5rem",
             }}
           >
-            {cards.map((Card, index) => (
+            {cards.map(({ Component, className }, index) => (
               <Box
                 key={index}
                 sx={{
@@ -94,7 +94,7 @@ export default function Landing() {
                   },
                 }}
               >
-                <Card.component className={Card.className} />
+                <Component className={className} />
               </Box>
             ))}
           </Box>
@@ -108,7 +108,7 @@ export default function Landing() {
               gap: ".5rem",
             }}
           >
-            {cards.map((Card, index) => (
+            {cards.map(({ Component, className }, index) => (
               <Box
                 key={index}
                 sx={{
@@ -122,7 +122,7 @@ export default function Landing() {
                   },
                 }}
               >
-                <Card.component className={Card.className} />
+                <Component className={className} />
               </Box>
             ))}
           </Box>

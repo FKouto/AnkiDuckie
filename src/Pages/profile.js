@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Typography, CircularProgress } from "@mui/material";
+import React from "react";
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import { Typography, CircularProgress } from "@mui/material";
 import ModalComponent from "../Components/modalComponent"; // Ajuste o caminho conforme necessário
 
 function Profile() {

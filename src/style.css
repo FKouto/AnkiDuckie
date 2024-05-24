@@ -57,3 +57,21 @@
     }
   }
 }
+
+.animationViewDeckButton:hover {
+  animation: buttonViewDeck 0.2s ease-in-out;
+}
+@keyframes buttonViewDeck {
+  0% {
+    transform: scale(1);
+    rotate: 8deg;
+  }
+  50% {
+    transform: scale(1.05);
+    rotate: -8deg;
+  }
+  100% {
+    transform: scale(1);
+    rotate: 8deg;
+  }
+}
