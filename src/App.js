@@ -75,7 +75,7 @@ function App() {
           height: "100vh", // Define a altura como 100% da altura da viewport
           margin: "0px !important", // Remove a margem
           padding: "0px !important", // Remove o padding
-          overflow: "hidden", // Remove a barra de rolagem
+          
         }}
       >
         {/* ThemeProvider aplica o tema customizado a todos os componentes filhos */}

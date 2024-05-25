@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Typography, CircularProgress } from "@mui/material";
-import Box from "@mui/material/Box";
-import ModalComponent from "../Components/modalComponent";
+import { Typography, CircularProgress, Grid, Box } from "@mui/material";
+import AsideHome from "../Components/aside";
 import CardComponent from "../Components/cardComponent";
 
 export default function Home() {
@@ -12,21 +11,18 @@ export default function Home() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
-        // Recupera o token do localStorage
         const token = localStorage.getItem("token");
+        const config = { headers: { Authorization: `Bearer ${token}` } };
 
-        // Configura o cabeçalho da requisição com o token
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`, // Token deve ser enviado como Bearer token
-          },
-        };
+        const [usersResponse, deckSummaryResponse] = await Promise.all([
+          axios.get("http://localhost:8080/user", config),
+          axios.get("http://localhost:8080/deck/summary", config),
+        ]);
 
-        const response = await axios.get("http://localhost:8080/user", config);
-
-        setUsers(response.data);
+        setUsers(usersResponse.data);
+        setDeckSummary(deckSummaryResponse.data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setError("Recurso não encontrado (404).");
@@ -38,32 +34,7 @@ export default function Home() {
       }
     };
 
-    const fetchDeckSummary = async () => {
-      try {
-        // Recupera o token do localStorage
-        const token = localStorage.getItem("token");
-
-        // Configura o cabeçalho da requisição com o token
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`, // Token deve ser enviado como Bearer token
-          },
-        };
-
-        const response = await axios.get(
-          "http://localhost:8080/deck/summary",
-          config
-        );
-        setDeckSummary(response.data);
-
-        console.log(response.data); // Imprimir dados no console
-      } catch (err) {
-        console.error("Erro ao carregar resumo do deck:", err);
-      }
-    };
-
-    fetchUsers();
-    fetchDeckSummary();
+    fetchData();
   }, []);
 
   if (loading) {
@@ -75,10 +46,24 @@ export default function Home() {
   }
 
   return (
-    <Box sx={{ padding: ".5rem" }}>
-      <ModalComponent />
-      <h1>usuario autorizado</h1>
-      <CardComponent deckSummary={deckSummary} />
+    <Box component="main" sx={{ height: "100%" }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          position: { xs: "absolute", md: "relative" },
+          bottom: { xs: 0 },
+          flexDirection: { xs: "column-reverse", md: "row" },
+          padding: "1rem"
+        }}
+      >
+        <Grid item xs={12} md={1}>
+          <AsideHome />
+        </Grid>
+        <Grid item xs={12} md={11}>
+          <CardComponent deckSummary={deckSummary} />
+        </Grid>
+      </Grid>
     </Box>
   );
 }

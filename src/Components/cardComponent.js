@@ -31,7 +31,7 @@ export default function CardComponent({ deckSummary }) {
         display: "flex",
         gap: "1rem",
         flexWrap: "wrap",
-        justifyContent: "center",
+        justifyContent: {xs: "center", md: "flex-start"},
       }}
     >
       {deckSummary.map((deck, index) => {
