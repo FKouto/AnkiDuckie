@@ -7,12 +7,24 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#caf0f8", // Cor de fundo
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "35px", // Bordas achei mais estético colcoar bordas arredondadas
-  textAlign: "center", // Centralizar conteúdo, achei viável centralizar
+  width: { xs: '90%', sm: 400 },
+  maxHeight: '90vh',
+  overflowY: 'auto',
+  background: "linear-gradient(145deg, #0077b6, #00b4d8)", // Gradiente azul
+  boxShadow: "0 10px 20px rgba(0,119,182,0.2), 0 6px 6px rgba(0,119,182,0.2)", // Sombras em tons de azul para efeito 3D
+  p: { xs: 2, sm: 4 },
+  borderRadius: "35px",
+  textAlign: "center",
+  border: "1px solid #00b4d8", // Borda azul
+};
+
+const buttonStyle = {
+  mt: 2,
+  transition: "transform 0.3s",
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
+  mx: 1, // Adiciona margem horizontal entre os botões
 };
 
 function ModalComponent() {
@@ -141,13 +153,13 @@ function ModalComponent() {
           <path
             d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"
             stroke="currentColor"
-            stroke-width="1.5"
+            strokeWidth="1.5"
           />
           <path
             d="M7.5 17C9.8317 14.5578 14.1432 14.4428 16.5 17M14.4951 9.5C14.4951 10.8807 13.3742 12 11.9915 12C10.6089 12 9.48797 10.8807 9.48797 9.5C9.48797 8.11929 10.6089 7 11.9915 7C13.3742 7 14.4951 8.11929 14.4951 9.5Z"
             stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
+            strokeWidth="1.5"
+            strokeLinecap="round"
           />
         </svg>
       </Button>
@@ -173,7 +185,7 @@ function ModalComponent() {
             disabled={!editMode}
             sx={{
               "& .MuiInputBase-root": {
-                bgcolor: "rgba(255, 255, 255, 0.7)", // Fundo transparente
+                bgcolor: "rgba(255, 255, 255, 0.7)",
                 borderRadius: "8px",
               },
             }}
@@ -188,7 +200,7 @@ function ModalComponent() {
             disabled
             sx={{
               "& .MuiInputBase-root": {
-                bgcolor: "rgba(255, 255, 255, 0.7)", // Fundo transparente
+                bgcolor: "rgba(255, 255, 255, 0.7)",
                 borderRadius: "8px",
               },
             }}
@@ -203,7 +215,7 @@ function ModalComponent() {
             disabled={!editMode}
             sx={{
               "& .MuiInputBase-root": {
-                bgcolor: "rgba(255, 255, 255, 0.7)", // Fundo das box de texto transparente para não ficar feio.
+                bgcolor: "rgba(255, 255, 255, 0.7)",
                 borderRadius: "10px",
               },
             }}
@@ -213,7 +225,7 @@ function ModalComponent() {
               onClick={handleEdit}
               variant="contained"
               color="primary"
-              sx={{ mt: 2, mr: 2 }}
+              sx={buttonStyle}
             >
               Editar
             </Button>
@@ -222,7 +234,7 @@ function ModalComponent() {
               onClick={handleSave}
               variant="contained"
               color="primary"
-              sx={{ mt: 2, mr: 2 }}
+              sx={buttonStyle}
             >
               Salvar
             </Button>
@@ -231,7 +243,7 @@ function ModalComponent() {
             onClick={handleClose}
             variant="contained"
             color="secondary"
-            sx={{ mt: 2 }}
+            sx={buttonStyle}
           >
             Fechar
           </Button>
