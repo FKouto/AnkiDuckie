@@ -174,7 +174,6 @@ export default function GeminiPage() {
           "Content-Type": "application/json",
         },
       };
-
       const response = await fetch(
         "http://localhost:8080/user/sendDeck",
         options
