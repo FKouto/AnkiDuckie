@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+// Importações de bibliotecas React e utilitários
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 // Edição do texto devolvido pelo Gemini
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-// MUI
+
+// Importações do MUI
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -12,17 +15,22 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Alert from "@mui/material/Alert";
+
+// Importação de estilos
 import "../style.css";
-// Cores Randomicas
+
+// Importações de componentes personalizados
 import ColorsUse from "../components/colors";
-// Icons
+
+// Importações de ícones
 const Random = require("../assets/icons/random.svg").ReactComponent;
 const MakeQuestion = require("../assets/icons/makeQuestion.svg").ReactComponent;
 const ArrowBack = require("../assets/icons/arrowBack.svg").ReactComponent;
 const PenMagic = require("../assets/icons/penMagic.svg").ReactComponent;
 const Search = require("../assets/icons/search.svg").ReactComponent;
 
-// Styles
+// Componente de botão estilizado
 const StyledButton = ({ children, onClick, sx }) => (
   <Button
     onClick={onClick}
@@ -41,27 +49,44 @@ const StyledButton = ({ children, onClick, sx }) => (
 );
 
 export default function GeminiPage() {
+  // Inicializações e estados
   const navigate = useNavigate();
   const { primaryColor, primaryColorHover, primaryColorTransparent } =
     ColorsUse();
-  const [error, setErr] = useState("");
+
+  const [err, setErr] = useState("");
+  const [success, setSuccess] = useState("");
   const [value, setValue] = useState("");
   const [titleDeck, setTitleDeck] = useState("");
   const [numQuestions, setNumQuestions] = useState(1); // Novo estado para o número de perguntas
   const [numAnswers, setNumAnswers] = useState(1); // Novo estado para o número de respostas
   const [chatHistory, setChatHistory] = useState([]);
+
+  // Opções para seleção
   const questionOptions = Array.from({ length: 10 }, (_, i) => i + 1);
   const answerOptions = Array.from({ length: 4 }, (_, i) => i + 1);
+
   // Display Mostrar/Ocultar Divs
+  const [chatEstanciado, setChatEstanciado] = useState(false);
   const [showPrompt, setShowPrompt] = useState(true);
   const [showMakeQuestion, setShowMakeQuestion] = useState(false);
   const [showSendQuestion, setShowSendQuestion] = useState(false);
-  const [chatEstanciado, setChatEstanciado] = useState(false);
   const [gerouPerguntas, setGerouPerguntas] = useState(false);
-  const [textoPreenchido, setTextoPreenchido] = useState(false);
-  const isTextFieldEmpty = () => {
-    return titleDeck.trim() === ""; // Verifica se o texto está vazio ou apenas espaços em branco
-  };
+
+  // Efeito para limpar mensagens de erro/sucesso após 5 segundos
+  useEffect(() => {
+    if (err || success) {
+      const timer = setTimeout(() => {
+        setErr("");
+        setSuccess("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [err, success]);
+
+  // Funções de manipulação de estado e navegação
+  const isTextFieldEmpty = () => titleDeck.trim() === "";
 
   const handleShowPrompt = () => {
     setShowPrompt(true);
@@ -87,6 +112,7 @@ export default function GeminiPage() {
     setValue(randomPrompt);
   };
 
+  // Funções assíncronas para interações com API
   const getResponse = async () => {
     if (!value) {
       setErr("Error! Please ask a question first!");
@@ -114,14 +140,8 @@ export default function GeminiPage() {
 
       setChatHistory((oldChatHistory) => [
         ...oldChatHistory,
-        {
-          role: "user",
-          parts: [{ text: value }],
-        },
-        {
-          role: "model",
-          parts: [{ text: data }],
-        },
+        { role: "user", parts: [{ text: value }] },
+        { role: "model", parts: [{ text: data }] },
       ]);
 
       setValue("");
@@ -134,7 +154,7 @@ export default function GeminiPage() {
 
   const createQuestions = async () => {
     try {
-      const token = localStorage.getItem("token"); // Pegue o token do local storage
+      const token = localStorage.getItem("token");
       const options = {
         method: "POST",
         body: JSON.stringify({
@@ -142,7 +162,7 @@ export default function GeminiPage() {
           titleDeck: titleDeck,
           numQuestions: numQuestions,
           numAnswers: numAnswers,
-          token: token, // Inclua o token no corpo da requisição
+          token: token,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -158,10 +178,7 @@ export default function GeminiPage() {
 
       setChatHistory((oldChatHistory) => [
         ...oldChatHistory,
-        {
-          role: "model",
-          parts: [{ text: data }],
-        },
+        { role: "model", parts: [{ text: data }] },
       ]);
     } catch (error) {
       console.error(error);
@@ -172,13 +189,13 @@ export default function GeminiPage() {
 
   const formatQuestions = async () => {
     try {
-      const token = localStorage.getItem("token"); // Pegue o token do local storage
+      const token = localStorage.getItem("token");
       const options = {
         method: "POST",
         body: JSON.stringify({
           titleDeck: titleDeck,
           chatHistory: chatHistory,
-          token: token, // Inclua o token no corpo da requisição
+          token: token,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -193,10 +210,7 @@ export default function GeminiPage() {
 
       setChatHistory((oldChatHistory) => [
         ...oldChatHistory,
-        {
-          role: "model",
-          parts: [{ text: data }],
-        },
+        { role: "model", parts: [{ text: data }] },
       ]);
       navigate("/home");
     } catch (error) {
@@ -209,18 +223,16 @@ export default function GeminiPage() {
     if (!isTextFieldEmpty()) {
       formatQuestions();
     } else {
-      // Adicione aqui uma lógica para lidar com o caso em que o TextField está vazio
-      alert('Por favor, preencha o campo "Nome Deck" antes de enviar.');
+      setErr("Por favor, preencha o campo 'Nome Deck' antes de enviar.");
     }
   };
 
-  const Role = ({ role }) => {
-    return (
-      <span className={role === "user" ? "user-role" : "assistant-role"}>
-        {role}
-      </span>
-    );
-  };
+  // Componentes de exibição
+  const Role = ({ role }) => (
+    <span className={role === "user" ? "user-role" : "assistant-role"}>
+      {role}
+    </span>
+  );
 
   const Text = ({ text }) => {
     const htmlContent = marked(text);
@@ -242,6 +254,7 @@ export default function GeminiPage() {
         justifyContent: "flex-end",
       }}
     >
+      {/* Chat History Display */}
       <Box
         className="search-result"
         sx={{
@@ -251,17 +264,17 @@ export default function GeminiPage() {
           marginTop: "1rem",
           overflowY: "scroll",
           "&::-webkit-scrollbar": {
-            width: "3px", // Largura do scrollbar
+            width: "3px",
           },
           "&::-webkit-scrollbar-track": {
-            backgroundColor: "#f1f1f1", // Cor do fundo do track
+            backgroundColor: "#f1f1f1",
           },
           "&::-webkit-scrollbar-thumb": {
-            backgroundColor: primaryColor, // Cor do thumb
-            borderRadius: "4px", // Borda arredondada do thumb
+            backgroundColor: primaryColor,
+            borderRadius: "4px",
           },
           "&::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: primaryColorHover, // Cor do thumb quando hover
+            backgroundColor: primaryColorHover,
           },
         }}
       >
@@ -275,8 +288,9 @@ export default function GeminiPage() {
             </Box>
           ))}
       </Box>
+
+      {/* Prompt Section */}
       <Box sx={{ height: "fit-content" }}>
-        {/* Inserir Prompt */}
         <Box
           className="prompt"
           style={{ display: showPrompt ? "block" : "none" }}
@@ -295,12 +309,7 @@ export default function GeminiPage() {
               borderColor: primaryColorHover,
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
               <StyledButton
                 className="surprise"
                 onClick={surprise}
@@ -366,17 +375,17 @@ export default function GeminiPage() {
                   sx={{
                     "& .MuiInputBase-inputMultiline": {
                       "&::-webkit-scrollbar": {
-                        width: "3px", // Largura do scrollbar
+                        width: "3px",
                       },
                       "&::-webkit-scrollbar-track": {
-                        backgroundColor: "#f1f1f1", // Cor do fundo do track
+                        backgroundColor: "#f1f1f1",
                       },
                       "&::-webkit-scrollbar-thumb": {
-                        backgroundColor: primaryColor, // Cor do thumb
-                        borderRadius: "4px", // Borda arredondada do thumb
+                        backgroundColor: primaryColor,
+                        borderRadius: "4px",
                       },
                       "&::-webkit-scrollbar-thumb:hover": {
-                        backgroundColor: primaryColorHover, // Cor do thumb quando hover
+                        backgroundColor: primaryColorHover,
                       },
                     },
                   }}
@@ -401,7 +410,8 @@ export default function GeminiPage() {
             </Box>
           </Box>
         </Box>
-        {/* Criar Questões */}
+
+        {/* Create Questions Section */}
         <Box
           className="makeQuestion"
           style={{ display: showMakeQuestion ? "block" : "none" }}
@@ -433,11 +443,7 @@ export default function GeminiPage() {
                 },
               }}
             >
-              <ArrowBack
-                style={{
-                  color: "#FFF",
-                }}
-              />
+              <ArrowBack style={{ color: "#FFF" }} />
             </StyledButton>
 
             <Box
@@ -522,7 +528,8 @@ export default function GeminiPage() {
             </Box>
           </Box>
         </Box>
-        {/* Enviar Questões */}
+
+        {/* Send Questions Section */}
         <Box
           className="sendQuestion"
           style={{ display: showSendQuestion ? "block" : "none" }}
@@ -543,6 +550,19 @@ export default function GeminiPage() {
               borderColor: primaryColorHover,
             }}
           >
+            {err && (
+              <Alert
+                severity="warning"
+                sx={{
+                  fontWeight: "600",
+                  borderRadius: "1rem",
+                  mt: 1,
+                  mb: 1,
+                }}
+              >
+                {err}
+              </Alert>
+            )}
             <StyledButton
               onClick={handleShowMakeQuestion}
               size="small"
@@ -554,11 +574,7 @@ export default function GeminiPage() {
                 },
               }}
             >
-              <ArrowBack
-                style={{
-                  color: "#FFF",
-                }}
-              />
+              <ArrowBack style={{ color: "#FFF" }} />
             </StyledButton>
 
             <Box
@@ -589,17 +605,17 @@ export default function GeminiPage() {
                   borderRadius: "1rem !important",
                   "& .MuiInputBase-inputMultiline": {
                     "&::-webkit-scrollbar": {
-                      width: "3px", // Largura do scrollbar
+                      width: "3px",
                     },
                     "&::-webkit-scrollbar-track": {
-                      backgroundColor: "#f1f1f1", // Cor do fundo do track
+                      backgroundColor: "#f1f1f1",
                     },
                     "&::-webkit-scrollbar-thumb": {
-                      backgroundColor: primaryColor, // Cor do thumb
-                      borderRadius: "4px", // Borda arredondada do thumb
+                      backgroundColor: primaryColor,
+                      borderRadius: "4px",
                     },
                     "&::-webkit-scrollbar-thumb:hover": {
-                      backgroundColor: primaryColorHover, // Cor do thumb quando hover
+                      backgroundColor: primaryColorHover,
                     },
                   },
                 }}
