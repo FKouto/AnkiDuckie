@@ -1,19 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal, Box, Typography, TextField } from "@mui/material";
 import axios from "axios";
+import ColorsUse from "./colors";
+
+const Perfil = require("../assets/icons/perfil.svg").ReactComponent;
+
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 400,
+//   bgcolor: "#caf0f8", // Cor de fundo
+//   boxShadow: 24,
+//   p: 4,
+//   borderRadius: "35px", // Bordas achei mais estético colcoar bordas arredondadas
+//   textAlign: "center", // Centralizar conteúdo, achei viável centralizar
+// };
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#caf0f8", // Cor de fundo
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "35px", // Bordas achei mais estético colcoar bordas arredondadas
-  textAlign: "center", // Centralizar conteúdo, achei viável centralizar
+  width: { xs: '90%', sm: 400 },
+  maxHeight: '90vh',
+  background: "linear-gradient(145deg, #0077b6, #00b4d8)", // Gradiente azul
+ 
+  p: { xs: 2, sm: 4 },
+  borderRadius: "35px",
+  textAlign: "center",
+  border: "1px solid #00b4d8", // Borda azul
 };
+
 
 export default function ProfileModal() {
   const [open, setOpen] = useState(false);
@@ -22,57 +41,7 @@ export default function ProfileModal() {
   const [editedUser, setEditedUser] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  const [primaryColor, setPrimaryColor] = useState("");
-  const [primaryColorHover, setPrimaryColorHover] = useState("");
-  const [primaryColorTransparent, setPrimaryColorTransparent] = useState("");
-  const [openProfileModal, setOpenProfileModal] = useState(false); // Estado para controlar o modal
-
-  const colors = [
-    "hsl(213, 48%, 75%)",
-    "hsl(265, 37%, 77%)",
-    "hsl(33, 67%, 83%)",
-    "hsl(14, 78%, 83%)",
-    "hsl(168, 49%, 78%)",
-    "hsl(326, 45%, 81%)",
-  ];
-
-  useEffect(() => {
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    setPrimaryColor(randomColor);
-
-    const hoverColor = darkenColor(randomColor, 25);
-    setPrimaryColorHover(hoverColor);
-
-    const transparentColor = setOpacity(randomColor, 0.5);
-    setPrimaryColorTransparent(transparentColor);
-  }, []);
-
-  const darkenColor = (color, percent) => {
-    const hsv = colorToHSV(color);
-    hsv.v = Math.max(0, hsv.v - percent / 100);
-    return HSVToColor(hsv);
-  };
-
-  const setOpacity = (color, opacity) => {
-    const hslaColor = color
-      .replace("hsl", "hsla")
-      .replace(")", `, ${opacity})`);
-    return hslaColor;
-  };
-
-  const colorToHSV = (color) => {
-    const match = color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-    if (!match) return null;
-    const [, h, s, v] = match.map(parseFloat);
-    return { h, s: s / 100, v: v / 100 };
-  };
-
-  const HSVToColor = (hsv) => {
-    const { h, s, v } = hsv;
-    const hsl = `hsl(${h}, ${s * 100}%, ${v * 100}%)`;
-    return hsl;
-  };
+  const { primaryColorHover } = ColorsUse();
 
   useEffect(() => {
     if (error || success) {
@@ -175,26 +144,7 @@ export default function ProfileModal() {
         }}
         onClick={handleOpen}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          style={{ color: primaryColorHover }}
-          fill="none"
-        >
-          <path
-            d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path
-            d="M7.5 17C9.8317 14.5578 14.1432 14.4428 16.5 17M14.4951 9.5C14.4951 10.8807 13.3742 12 11.9915 12C10.6089 12 9.48797 10.8807 9.48797 9.5C9.48797 8.11929 10.6089 7 11.9915 7C13.3742 7 14.4951 8.11929 14.4951 9.5Z"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
+        <Perfil style={{ color: primaryColorHover }} />
       </Button>
       <Modal
         open={open}

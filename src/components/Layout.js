@@ -57,7 +57,7 @@ export default function Layout({ children }) {
           <Grid item xs={12} md={1} sx={{ padding: { xs: 1 } }}>
             <Navbar />
           </Grid>
-          <Grid item xs={12} md={11} sx={{ height: "100vh" }}>
+          <Grid item xs={12} md={11} sx={{ height: "98.5vh" }}>
             {children}
           </Grid>
         </Grid>
