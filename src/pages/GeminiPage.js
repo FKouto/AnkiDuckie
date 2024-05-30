@@ -44,7 +44,7 @@ export default function GeminiPage() {
     ColorsUse();
   const [error, setErr] = useState("");
   const [value, setValue] = useState("");
-  const [titleDeck, setTitleDeck] = useState(1);
+  const [titleDeck, setTitleDeck] = useState("");
   const [numQuestions, setNumQuestions] = useState(1); // Novo estado para o número de perguntas
   const [numAnswers, setNumAnswers] = useState(1); // Novo estado para o número de respostas
   const [chatHistory, setChatHistory] = useState([]);
@@ -454,7 +454,7 @@ export default function GeminiPage() {
               </FormControl>
               <FormControl sx={{ minWidth: "100%" }}>
                 <InputLabel id="num-answers-label">
-                  Número de perguntas
+                  Número de respostas
                 </InputLabel>
                 <Select
                   sx={{ borderRadius: "1rem" }}
