@@ -83,3 +83,20 @@
 .assistant-role {
   color: blue;
 }
+
+@media (min-width: 320px) {
+  .GeminiPage {
+    height: 70vh;
+  }
+}
+@media (min-width: 1024px) {
+  .GeminiPage {
+    height: 78vh;
+  }
+}
+@media (min-width: 1440px) {
+  .GeminiPage {
+    height: 80vh;
+  }
+}
+

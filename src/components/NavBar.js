@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AppBar, Toolbar, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ColorsUse from "./colors";

@@ -47,21 +47,19 @@ export default function Layout({ children }) {
     return <Typography color="error">{error}</Typography>;
   }
   return (
-    <Box component="main">
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid
-          container
-          spacing={0}
-          sx={{ padding: ".5rem", alignItems: "center" }}
-        >
-          <Grid item xs={12} md={1} sx={{ padding: { xs: 1 } }}>
-            <Navbar />
-          </Grid>
-          <Grid item xs={12} md={11} sx={{ height: "98.5vh" }}>
-            {children}
-          </Grid>
+    <Box component="main" sx={{ height: "100vh" }}>
+      <Grid
+        container
+        spacing={0}
+        sx={{ alignItems: "center", height: "-webkit-fill-available" }}
+      >
+        <Grid item xs={12} md={1} sx={{ padding: { xs: 1 } }}>
+          <Navbar />
         </Grid>
-      </Box>
+        <Grid item xs={12} md={11} sx={{ height: "-webkit-fill-available" }}>
+          {children}
+        </Grid>
+      </Grid>
     </Box>
   );
 }

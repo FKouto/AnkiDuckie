@@ -4,7 +4,6 @@ import { Typography, CircularProgress, Box } from "@mui/material";
 import DeckComponent from "../components/Deck";
 
 export default function DeckPage() {
-  const [users, setUsers] = useState([]);
   const [deckSummary, setDeckSummary] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

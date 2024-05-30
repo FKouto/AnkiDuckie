@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // Edição do texto devolvido pelo Gemini
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 // MUI
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -12,6 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import "../style.css";
 // Cores Randomicas
 import ColorsUse from "../components/colors";
 // Icons
@@ -40,6 +41,7 @@ const StyledButton = ({ children, onClick, sx }) => (
 );
 
 export default function GeminiPage() {
+  const navigate = useNavigate();
   const { primaryColor, primaryColorHover, primaryColorTransparent } =
     ColorsUse();
   const [error, setErr] = useState("");
@@ -54,6 +56,12 @@ export default function GeminiPage() {
   const [showPrompt, setShowPrompt] = useState(true);
   const [showMakeQuestion, setShowMakeQuestion] = useState(false);
   const [showSendQuestion, setShowSendQuestion] = useState(false);
+  const [chatEstanciado, setChatEstanciado] = useState(false);
+  const [gerouPerguntas, setGerouPerguntas] = useState(false);
+  const [textoPreenchido, setTextoPreenchido] = useState(false);
+  const isTextFieldEmpty = () => {
+    return titleDeck.trim() === ""; // Verifica se o texto está vazio ou apenas espaços em branco
+  };
 
   const handleShowPrompt = () => {
     setShowPrompt(true);
@@ -121,6 +129,7 @@ export default function GeminiPage() {
       console.error(error);
       setErr("Something went wrong!");
     }
+    setChatEstanciado(true);
   };
 
   const createQuestions = async () => {
@@ -158,6 +167,7 @@ export default function GeminiPage() {
       console.error(error);
       setErr("Something went wrong!");
     }
+    setGerouPerguntas(true);
   };
 
   const formatQuestions = async () => {
@@ -188,9 +198,19 @@ export default function GeminiPage() {
           parts: [{ text: data }],
         },
       ]);
+      navigate("/home");
     } catch (error) {
       console.error(error);
       setErr("Something went wrong!");
+    }
+  };
+
+  const handleEnviarClick = () => {
+    if (!isTextFieldEmpty()) {
+      formatQuestions();
+    } else {
+      // Adicione aqui uma lógica para lidar com o caso em que o TextField está vazio
+      alert('Por favor, preencha o campo "Nome Deck" antes de enviar.');
     }
   };
 
@@ -214,29 +234,48 @@ export default function GeminiPage() {
   };
 
   return (
-    <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
-        <Box className="search-result" sx={{ height: "100%" }}>
-          {chatHistory &&
-            chatHistory.map((chatItem, _index) => (
-              <Box key={_index} mb={2}>
-                <Typography className="answer">
-                  <Role role={chatItem.role} /> :{" "}
-                  <Text text={chatItem.parts[0].text} />
-                </Typography>
-              </Box>
-            ))}
-        </Box>
-      </Box>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+      }}
+    >
       <Box
+        className="search-result"
         sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          bgcolor: "background.paper",
+          height: "100%",
+          width: "80%",
+          margin: "auto",
+          marginTop: "1rem",
+          overflowY: "scroll",
+          "&::-webkit-scrollbar": {
+            width: "3px", // Largura do scrollbar
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1", // Cor do fundo do track
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: primaryColor, // Cor do thumb
+            borderRadius: "4px", // Borda arredondada do thumb
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: primaryColorHover, // Cor do thumb quando hover
+          },
         }}
       >
+        {chatHistory &&
+          chatHistory.map((chatItem, _index) => (
+            <Box key={_index} mb={2}>
+              <Typography className="answer">
+                <Role role={chatItem.role} /> :{" "}
+                <Text text={chatItem.parts[0].text} />
+              </Typography>
+            </Box>
+          ))}
+      </Box>
+      <Box sx={{ height: "fit-content" }}>
         {/* Inserir Prompt */}
         <Box
           className="prompt"
@@ -260,21 +299,6 @@ export default function GeminiPage() {
               sx={{
                 display: "flex",
                 flexDirection: "row",
-                overflowX: "scroll",
-                borderRadius: "1rem",
-                "&::-webkit-scrollbar": {
-                  height: "5px",
-                },
-                "&::-webkit-scrollbar-track": {
-                  backgroundColor: primaryColorTransparent, // Cor do fundo do track
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: primaryColor, // Cor do thumb
-                  borderRadius: "10px", // Borda arredondada do thumb
-                },
-                "&::-webkit-scrollbar-thumb:hover": {
-                  backgroundColor: primaryColorHover, // Cor do thumb quando hover
-                },
               }}
             >
               <StyledButton
@@ -291,11 +315,17 @@ export default function GeminiPage() {
                 <Random />
                 Surpresa
               </StyledButton>
-              <StyledButton
-                className="surprise"
+              <Button
+                disabled={!chatEstanciado}
                 onClick={handleShowMakeQuestion}
                 size="small"
                 sx={{
+                  textTransform: "capitalize",
+                  color: "white",
+                  padding: ".3rem",
+                  margin: ".3rem",
+                  minWidth: "fit-content",
+                  borderRadius: ".8rem",
                   background: primaryColorHover,
                   "&:hover": {
                     background: primaryColor,
@@ -303,29 +333,15 @@ export default function GeminiPage() {
                 }}
               >
                 <MakeQuestion />
-                Criar Perguntas & Respostas
-              </StyledButton>
-              <StyledButton
-                className="surprise"
-                onClick={handleShowMakeQuestion}
-                size="small"
-                sx={{
-                  background: primaryColorHover,
-                  "&:hover": {
-                    background: primaryColor,
-                  },
-                }}
-              >
-                <MakeQuestion />
-                Criar Perguntas & Respostas
-              </StyledButton>
+                Criar
+              </Button>
             </Box>
             <Box
               sx={{
                 width: "100%",
                 display: "flex",
                 flexDirection: "row",
-                padding: ".8rem",
+                padding: ".5rem",
                 alignItems: "center",
                 border: "1.2px solid #DEE2E6",
                 borderRadius: "5rem",
@@ -480,13 +496,20 @@ export default function GeminiPage() {
                   },
                 }}
               >
-                Criar
+                Gerar Perguntas & Respostas
                 <PenMagic />
               </StyledButton>
-              <StyledButton
+              <Button
+                disabled={!gerouPerguntas}
                 onClick={handleSendQuestion}
                 sx={{
                   width: "100%",
+                  textTransform: "capitalize",
+                  color: "white",
+                  padding: ".3rem",
+                  margin: ".3rem",
+                  minWidth: "fit-content",
+                  borderRadius: ".8rem",
                   background: primaryColorHover,
                   "&:hover": {
                     background: primaryColor,
@@ -495,7 +518,7 @@ export default function GeminiPage() {
               >
                 Próximo
                 <PenMagic />
-              </StyledButton>
+              </Button>
             </Box>
           </Box>
         </Box>
@@ -555,6 +578,7 @@ export default function GeminiPage() {
                 onChange={(e) => setTitleDeck(e.target.value)}
                 fullWidth
                 variant="standard"
+                required
                 InputProps={{
                   disableUnderline: true,
                 }}
@@ -581,7 +605,7 @@ export default function GeminiPage() {
                 }}
               />
               <StyledButton
-                onClick={formatQuestions}
+                onClick={handleEnviarClick}
                 sx={{
                   width: "100%",
                   background: primaryColorHover,
