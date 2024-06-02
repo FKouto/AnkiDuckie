@@ -1,7 +1,14 @@
-import Header from "../components/Header.js";
+import React from "react";
+// Components
+import Header from "../components/Header";
+// MUI UI
+import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import "../style.css";
+// Animação
+import { motion } from "framer-motion";
+// Deck
 import {
   CardAzul,
   CardLaranja,
@@ -9,8 +16,8 @@ import {
   CardRoxo,
   CardVerde,
   CardVermelho,
-} from "../components/DeckIllustration.js";
-
+} from "../assets/images/DecksExport";
+import "../style/style.css";
 // Array de objetos contendo os componentes dos cards e suas respectivas classes CSS
 const cards = [
   { Component: CardAzul, className: "Card-Column-1" },
@@ -21,106 +28,120 @@ const cards = [
   { Component: CardVermelho, className: "Card-Column-1" },
 ];
 
-export default function Landing() {
+export default function LandingPage() {
   return (
-    <Box component="main" sx={{ height: "100%", overflow: "hidden" }}>
-      {/* Header */}
+    <Box sx={{ height: "100vh" }}>
       <Header />
-      {/* Conteúdo */}
-      <Box
+      <Container
+        maxWidth="xl"
         component="section"
         sx={{
-          height: "-webkit-fill-available",
-          alignContent: "space-around",
+          height: "fit-content",
+          overflow: "hidden",
+          position: "absolute",
+          top: "50%",
+          left: "0%",
+          width: "100%",
+          textAlign: "center",
+          transform: "translateY( -50% )",
         }}
       >
-        <Box>
-          <Typography
-            variant="h2"
-            component="h2"
-            sx={{
-              fontFamily: '"Plus Jakarta Sans", "Poppins", sans-serif',
-              fontWeight: 600,
-              lineHeight: "normal",
-              textAlign: "center",
-            }}
-          >
-            Aprenda com flashcards,
-            <br /> estude menos!
-          </Typography>
-          <Typography
-            variant="h6"
-            component="h6"
-            sx={{
-              fontWeight: 500,
-              lineHeight: "normal",
-              textAlign: "center",
-            }}
-            gutterBottom
-          >
-            Esqueça o medo das provas e aprenda idiomas com facilidade! <br />A
-            repetição espaçada, com comprovação científica, é a sua aliada.
-          </Typography>
-        </Box>
-        <Box>
-          {/* Coluna 1 */}
-          <Box
-            className="ContainerCards-1"
-            sx={{
-              width: "fit-content",
-              display: "flex",
-              flexDirection: "row",
-              gap: ".5rem",
-            }}
-          >
-            {cards.map(({ Component, className }, index) => (
-              <Box
-                key={index}
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{ padding: ".5rem" }}>
+            <Typography
+              variant="h2"
+              component="h2"
+              sx={{
+                fontFamily: '"Plus Jakarta Sans", "Poppins", sans-serif',
+                fontWeight: 600,
+                lineHeight: "normal",
+                textAlign: "center",
+              }}
+            >
+              Aprenda com flashcards,
+              <br /> estude menos!
+            </Typography>
+            <Typography
+              variant="h6"
+              component="h6"
+              sx={{
+                fontWeight: 500,
+                lineHeight: "normal",
+                textAlign: "center",
+              }}
+              gutterBottom
+            >
+              Esqueça o medo das provas e aprenda idiomas com facilidade! <br />
+              A repetição espaçada, com comprovação científica, é a sua aliada.
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid
+                item
+                xs={12}
+                className="ContainerCards-1"
                 sx={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  padding: ".5rem",
-                  width: "20rem",
-                  transform: "scale(1)",
-                  "&:hover": {
-                    transform: "scale(1.08)",
-                  },
+                  width: "fit-content",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(6, 300px)",
+                  gap: "2rem",
                 }}
               >
-                <Component className={className} />
-              </Box>
-            ))}
-          </Box>
-          {/* Coluna 2 */}
-          <Box
-            className="ContainerCards-2"
-            sx={{
-              width: "fit-content",
-              display: "flex",
-              flexDirection: "row",
-              gap: ".5rem",
-            }}
-          >
-            {cards.map(({ Component, className }, index) => (
-              <Box
-                key={index}
+                {cards.map(({ Component, className }, index) => (
+                  <motion.a
+                    key={index}
+                    whileHover={{ scale: 1.1 }}
+                    onHoverStart={(e) => {}}
+                    onHoverEnd={(e) => {}}
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Component
+                      className={className}
+                      style={{ height: "fit-content", width: "100%" }}
+                    />
+                  </motion.a>
+                ))}
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                className="ContainerCards-2"
                 sx={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  padding: ".5rem",
-                  width: "20rem",
-                  transform: "scale(1)",
-                  "&:hover": {
-                    transform: "scale(1.08)",
-                  },
+                  width: "fit-content",
+                  display: { xs: "none", md: "grid" },
+                  gridTemplateColumns: "repeat(6, 300px)",
+                  gap: "2rem",
+                  paddingBottom: ".2rem",
                 }}
               >
-                <Component className={className} />
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      </Box>
+                {cards.map(({ Component, className }, index) => (
+                  <motion.a
+                    key={index}
+                    whileHover={{ scale: 1.1 }}
+                    onHoverStart={(e) => {}}
+                    onHoverEnd={(e) => {}}
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Component
+                      className={className}
+                      style={{ height: "fit-content", width: "100%" }}
+                    />
+                  </motion.a>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
     </Box>
   );
 }
