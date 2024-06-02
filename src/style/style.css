@@ -1,21 +1,22 @@
 /* Mantenha as animações para ambos os ContainerCards */
 .ContainerCards-1 {
-  animation: CardAnimation-Column-1 10s ease-in-out infinite;
+  /* transform: translateX(-100vw); */
+  /* animation: CardAnimation-Column-1 10s ease-in-out infinite; */
 }
 .ContainerCards-2 {
-  animation: CardAnimation-Column-2 10s ease-in-out infinite;
+  animation: CardAnimation-Column-2 60s ease-in-out infinite;
 }
 
 /* Ajuste as animações para a disposição lado a lado */
 @keyframes CardAnimation-Column-1 {
   0% {
-    transform: translateX(0%);
+    transform: translateX(100%);
   }
   50% {
     transform: translateX(-100%);
   }
   100% {
-    transform: translateX(0%);
+    transform: translateX(100%);
   }
 }
 
@@ -24,7 +25,7 @@
     transform: translateX(-100%);
   }
   50% {
-    transform: translateX(0%);
+    transform: translateX(200%);
   }
   100% {
     transform: translateX(-100%);
