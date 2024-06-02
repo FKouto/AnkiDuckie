@@ -1,0 +1,56 @@
+/* Mantenha as animações para ambos os ContainerCards */
+.ContainerCards-1 {
+  animation: CardAnimation-Column-1 10s ease-in-out infinite;
+}
+.ContainerCards-2 {
+  animation: CardAnimation-Column-2 10s ease-in-out infinite;
+}
+
+/* Ajuste as animações para a disposição lado a lado */
+@keyframes CardAnimation-Column-1 {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes CardAnimation-Column-2 {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Ajuste para dispositivos de largura máxima de 426px */
+@media (max-width: 426px) {
+  .ContainerCards-1,
+  .ContainerCards-2 {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(-webkit-fill-available, 1fr)
+    ); /* Use -webkit-fill-available para preencher o espaço disponível */
+  }
+
+  /* Ajuste a animação para a largura reduzida */
+  @keyframes CardAnimation-Column-1 {
+    0% {
+      transform: translateX(0%);
+    }
+    50% {
+      transform: translateX(-550%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+}
