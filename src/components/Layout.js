@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
+// Router DOM
 import { useNavigate } from "react-router-dom";
+// Axios (Comunicação Backend)
 import axios from "axios";
-import Navbar from "./NavBar";
+// MUI
+import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { CircularProgress } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+// Components
+import Navbar from "./NavBar";
+// Colors
+import ColorsUse from "./Colors/Colors";
 
 export default function Layout({ children }) {
+  const { primaryColor, primaryColorHover, primaryColorTransparent } =
+    ColorsUse();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,29 +45,66 @@ export default function Layout({ children }) {
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
+
   return (
-    <Box component="main" sx={{ height: "100vh" }}>
-      <Grid
-        container
-        spacing={0}
-        sx={{ alignItems: "center", height: "-webkit-fill-available" }}
+    <Container
+      maxWidth="100vh"
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", sm: "row" },
+        height: "100vh",
+        padding: "1rem",
+        gap: ".5rem",
+        boxSizing: "border-box", // Garantir que padding seja incluído no cálculo da altura total
+      }}
+    >
+      <Box
+        sx={{
+          flexGrow: 1,
+          width: { xs: "-webkit-fill-available", sm: "fit-content" },
+          height: { xs: "fit-content", sm: "-webkit-fill-available" },
+          alignContent: "center",
+        }}
       >
-        <Grid item xs={12} md={1} sx={{ padding: { xs: 1 } }}>
-          <Navbar />
-        </Grid>
-        <Grid item xs={12} md={11} sx={{ height: "-webkit-fill-available" }}>
-          {children}
-        </Grid>
-      </Grid>
-    </Box>
+        <Navbar />
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
+          width: "-webkit-fill-available",
+          height: "-webkit-fill-available",
+          overflowY: "scroll",
+          overflowX: "hidden !important",
+          "&::-webkit-scrollbar": {
+            width: "5px", // Largura do scrollbar
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: primaryColorTransparent, // Cor do fundo do track
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: primaryColor, // Cor do thumb
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: primaryColorHover, // Cor do thumb quando hover
+          },
+        }}
+      >
+        {children}
+      </Box>
+    </Container>
   );
 }

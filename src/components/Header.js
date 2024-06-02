@@ -1,9 +1,18 @@
+// Router DOM
 import { Link } from "react-router-dom";
-import { AppBar, Button, Toolbar } from "@mui/material";
+// MUI UI
+import { AppBar, Toolbar } from "@mui/material";
 import Box from "@mui/material/Box";
+// Custom Components MUI UI
+import ButtonsCustom from "./MUICustom/Button";
+// Cores
+import ColorsUse from "../components/Colors/Colors";
+// React Components
 const Logo = require("../logo.svg").ReactComponent;
-
 export default function Header() {
+  const { CustomButtonText, CustomButtonContained } = ButtonsCustom();
+  const { primaryColor, primaryColorHover, primaryColorTransparent } =
+    ColorsUse();
   return (
     <AppBar
       position="static"
@@ -19,32 +28,36 @@ export default function Header() {
         </Box>
         <Box>
           <Link to="/register">
-            <Button
+            <CustomButtonText
               variant="text"
-              color="inherit"
               sx={{
                 background: "none",
                 textTransform: "capitalize",
                 padding: ".5rem 1rem",
-                color: "black",
+                color: primaryColorHover,
+                "&:hover": {
+                  borderColor: primaryColor,
+                },
               }}
             >
               Cadastrar
-            </Button>
+            </CustomButtonText>
           </Link>
           <Link to="/login">
-            <Button
+            <CustomButtonContained
               variant="text"
               sx={{
-                background: "linear-gradient(45deg, #20212B, #16171F)",
-                padding: ".5rem 1rem",
-                borderRadius: ".5rem",
+                background: primaryColorHover,
                 textTransform: "capitalize",
                 color: "#FFF",
+                "&:hover": {
+                  background: primaryColor,
+                  borderColor: primaryColorHover,
+                },
               }}
             >
               Login
-            </Button>
+            </CustomButtonContained>
           </Link>
         </Box>
       </Toolbar>

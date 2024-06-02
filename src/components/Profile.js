@@ -1,64 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Box, Typography, TextField } from "@mui/material";
+// Axios (Comunicação Backend)
 import axios from "axios";
-import ColorsUse from "./colors";
-
-const Perfil = require("../assets/icons/perfil.svg").ReactComponent;
-
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   bgcolor: "#caf0f8", // Cor de fundo
-//   boxShadow: 24,
-//   p: 4,
-//   borderRadius: "35px", // Bordas achei mais estético colcoar bordas arredondadas
-//   textAlign: "center", // Centralizar conteúdo, achei viável centralizar
-// };
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: '90%', sm: 400 },
-  maxHeight: '90vh',
-  background: "linear-gradient(145deg, #0077b6, #00b4d8)", // Gradiente azul
- 
-  p: { xs: 2, sm: 4 },
-  borderRadius: "35px",
-  textAlign: "center",
-  border: "1px solid #00b4d8", // Borda azul
-};
-
+// MUI UI
+import { Button, Modal, Box, Typography, TextField } from "@mui/material";
+// Custom Components MUI UI
+import ButtonsCustom from "./MUICustom/Button";
+import CustomTextField from "./MUICustom/TextField";
+// Cores
+import ColorsUse from "./Colors/Colors";
+// Icons
+import HugeIcons from "../assets/icons/HugeIcons";
+const { ProfileIcon } = HugeIcons();
 
 export default function ProfileModal() {
+  // Cores
+  const { primaryColor, primaryColorHover, primaryColorTransparent } =
+    ColorsUse();
+  // Buttons Custom
+  const { CustomButtonContained } = ButtonsCustom();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [editedUser, setEditedUser] = useState({});
-  const [error, setError] = useState("");
+  const [err, setErr] = useState("");
   const [success, setSuccess] = useState("");
-  const { primaryColorHover } = ColorsUse();
 
   useEffect(() => {
-    if (error || success) {
+    if (err || success) {
       const timer = setTimeout(() => {
-        setError("");
+        setErr("");
         setSuccess("");
       }, 3000); // Mensagem desaparecerá após 3 segundos
 
       return () => clearTimeout(timer);
     }
-  }, [error, success]);
+  }, [err, success]);
 
   const handleOpen = async () => {
     setOpen(true);
     const token = localStorage.getItem("token");
     if (!token) {
-      setError("Token não encontrado");
+      setErr("Token não encontrado");
       return;
     }
 
@@ -69,16 +51,16 @@ export default function ProfileModal() {
       console.log(response.data); // Verificar os dados recebidos do backend
       setUser(response.data);
       setEditedUser(response.data);
-    } catch (error) {
-      setError("Erro ao carregar os dados do usuário");
-      console.error("Erro ao carregar os dados do usuário:", error);
+    } catch (err) {
+      setErr("Erro ao carregar os dados do usuário");
+      console.err("Erro ao carregar os dados do usuário:", err);
     }
   };
 
   const handleClose = () => {
     setOpen(false);
     setEditMode(false);
-    setError("");
+    setErr("");
     setSuccess("");
   };
 
@@ -88,14 +70,14 @@ export default function ProfileModal() {
 
   const handleSave = async () => {
     if (!editedUser.nome || !editedUser.email || !editedUser.password) {
-      setError("Todos os campos são obrigatórios");
-      setSuccess(""); // Clear success message when there is an error
+      setErr("Todos os campos são obrigatórios");
+      setSuccess("");
       return;
     }
 
     const token = localStorage.getItem("token");
     if (!token) {
-      setError("Token não encontrado");
+      setErr("Token não encontrado");
       return;
     }
 
@@ -115,14 +97,14 @@ export default function ProfileModal() {
       setUser(editedUser); // Salvando as alterações no estado do usuário
       setEditMode(false);
       setSuccess("Atualizado com sucesso!");
-      setError("");
-    } catch (error) {
-      console.log("Erro durante a atualização:", error);
-      setSuccess(""); // Clear success message when there is an error
-      if (error.response && error.response.status === 404) {
-        setError("Usuário não encontrado");
+      setErr("");
+    } catch (err) {
+      console.log("Erro durante a atualização:", err);
+      setSuccess(""); // Clear success message when there is an err
+      if (err.response && err.response.status === 404) {
+        setErr("Usuário não encontrado");
       } else {
-        setError(error.message || "Erro ao atualizar cadastro");
+        setErr(err.message || "Erro ao atualizar cadastro");
       }
     }
   };
@@ -144,7 +126,7 @@ export default function ProfileModal() {
         }}
         onClick={handleOpen}
       >
-        <Perfil style={{ color: primaryColorHover }} />
+        <ProfileIcon style={{ color: primaryColorHover }} />
       </Button>
       <Modal
         open={open}
@@ -152,13 +134,28 @@ export default function ProfileModal() {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        <Box sx={style}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { xs: "90%", sm: 400 },
+            maxHeight: "90vh",
+            backgroundColor: primaryColor,
+            border: "1px solid",
+            borderColor: primaryColorHover,
+            borderRadius: "1rem",
+            padding: "1rem",
+          }}
+        >
           <Typography id="modal-title" variant="h6" component="h2">
-            Perfil do Anckier
+            Perfil
           </Typography>
-          {error && <Typography color="error">{error}</Typography>}
+          {err && <Typography color="err">{err}</Typography>}
           {success && <Typography color="success">{success}</Typography>}
-          <TextField
+          <CustomTextField
+            variant="filled"
             label="Nome"
             name="nome"
             value={editMode ? editedUser.nome : user.nome}
@@ -167,13 +164,20 @@ export default function ProfileModal() {
             margin="normal"
             disabled={!editMode}
             sx={{
-              "& .MuiInputBase-root": {
-                bgcolor: "rgba(255, 255, 255, 0.7)", // Fundo transparente
-                borderRadius: "8px",
+              width: "100%",
+              "& .MuiFilledInput-root": {
+                backgroundColor: "#FFF",
+                borderColor: primaryColorHover,
+                "&.Mui-focused": {
+                  backgroundColor: "#FF",
+                  boxShadow: `${primaryColor} 2px 2px 15px`,
+                  borderColor: primaryColorHover,
+                },
               },
             }}
           />
-          <TextField
+          <CustomTextField
+            variant="filled"
             label="E-mail"
             name="email"
             value={editMode ? editedUser.email : user.email}
@@ -182,13 +186,20 @@ export default function ProfileModal() {
             margin="normal"
             disabled
             sx={{
-              "& .MuiInputBase-root": {
-                bgcolor: "rgba(255, 255, 255, 0.7)", // Fundo transparente
-                borderRadius: "8px",
+              width: "100%",
+              "& .MuiFilledInput-root": {
+                backgroundColor: "#FFF",
+                borderColor: primaryColorHover,
+                "&.Mui-focused": {
+                  backgroundColor: "#FF",
+                  boxShadow: `${primaryColor} 2px 2px 15px`,
+                  borderColor: primaryColorHover,
+                },
               },
             }}
           />
-          <TextField
+          <CustomTextField
+            variant="filled"
             label="Senha"
             name="password"
             type="password"
@@ -197,9 +208,15 @@ export default function ProfileModal() {
             margin="normal"
             disabled={!editMode}
             sx={{
-              "& .MuiInputBase-root": {
-                bgcolor: "rgba(255, 255, 255, 0.7)", // Fundo das box de texto transparente para não ficar feio.
-                borderRadius: "10px",
+              width: "100%",
+              "& .MuiFilledInput-root": {
+                backgroundColor: "#FFF",
+                borderColor: primaryColorHover,
+                "&.Mui-focused": {
+                  backgroundColor: "#FF",
+                  boxShadow: `${primaryColor} 2px 2px 15px`,
+                  borderColor: primaryColorHover,
+                },
               },
             }}
           />
