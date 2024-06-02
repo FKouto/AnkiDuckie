@@ -1,54 +1,56 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+// Router DOM
 import { Link, useNavigate } from "react-router-dom";
-
-// Body
+// Axios (Comunicação Backend)
+import axios from "axios";
+// MUI UI
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import TextField from "@mui/material/TextField";
-// Typography
+// import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-// Header
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
-import { alpha, styled } from "@mui/material/styles";
-const Logo = require("../logo.svg").ReactComponent;
+// Cores
+import ColorsUse from "../components/Colors/Colors";
+// Animação
+import { motion } from "framer-motion";
+// Components
+import CustomTextField from "../components/MUICustom/TextField";
 
-// TextField Personalizado
-const DuckieTextField = styled((props) => (
-  <TextField InputProps={{ disableUnderline: true }} {...props} />
-))(({ theme }) => ({
-  "& .MuiFilledInput-root": {
-    overflow: "hidden",
-    borderRadius: "1.2rem",
-    backgroundColor: theme.palette.mode === "light" ? "#F3F6F9" : "#1A2027",
-    border: "1px solid",
-    borderColor: theme.palette.mode === "light" ? "#C6B4E4" : "#2D3843",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
-    "&:hover": {
-      backgroundColor: "#e5e5e5",
-      border: "1px solid #8C68C8",
-    },
-    "&.Mui-focused": {
-      backgroundColor: "#e5e5e5",
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-      borderColor: theme.palette.primary.main,
+const container = {
+  hidden: { opacity: 1, scale: 0 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
     },
   },
-}));
+};
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
+};
 
 export default function LoginPage() {
+  const { primaryColor, primaryColorHover, primaryColorTransparent } =
+    ColorsUse();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 9000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -82,122 +84,171 @@ export default function LoginPage() {
 
   const handleKeyDown = (event) => {
     if (event.keyCode === 13) {
-      // Verifica se a tecla pressionada é "Enter"
-      handleLogin(); // Chama a função handleLogin quando "Enter" é pressionado
+      handleLogin();
     }
   };
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <Container
-        sx={{
-          overflow: "hidden",
-          bgcolor: "#ADBDEB",
-          minWidth: "100vw !important",
-          margin: "0px !important",
-          padding: "0px !important",
-        }}
-      >
-        <Box
-          maxWidth="sm"
-          sx={{
-            height: "100vh",
-            margin: "auto",
-            padding: ".5rem",
-            alignContent: "center",
-          }}
-        >
-          {/* Header */}
-          <AppBar
-            position="absolute"
-            sx={{
-              position: "fixed",
-              top: "0",
-              background: "transparent",
-              boxShadow: "none",
-              color: "black",
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {error && (
+        <Box sx={{ position: "absolute", top: "10%" }}>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ rotate: 0, scale: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
             }}
           >
-            <Toolbar sx={{ justifyContent: "space-between" }}>
-              <Box>
-                <Logo />
-              </Box>
-            </Toolbar>
-          </AppBar>
-          {/* Login Form */}
-          <Box
-            sx={{
-              background: "#FFF",
-              padding: ".5rem",
-              borderRadius: "1.5rem",
-              textAlign: "center",
-            }}
-          >
-            <Box>
-              <Typography
-                variant="h5"
-                gutterBottom
-                sx={{ color: "#000", padding: "1rem 0rem" }}
+            <Container sx={{ width: "fit-content" }}>
+              <Alert
+                severity="error"
+                sx={{
+                  marginBottom: "1rem",
+                  borderRadius: "1rem",
+                  border: "2px solid",
+                }}
               >
-                Login
-              </Typography>
-            </Box>
-            {error && (
-              <Alert severity="error" sx={{ marginBottom: "1rem" }}>
                 {error}
               </Alert>
-            )}
-            <Box
-              sx={{ display: "flex", flexDirection: "column", gap: ".5rem" }}
+            </Container>
+          </motion.div>
+        </Box>
+      )}
+      <Container component="section" maxWidth="xs">
+        <CssBaseline />
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <motion.div variants={item}>
+            <Typography
+              component="h1"
+              variant="h5"
+              sx={{ fontWeight: 600, padding: "1rem 0" }}
             >
-              <DuckieTextField
-                id="outlined-required-email"
+              Login
+            </Typography>
+          </motion.div>
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: ".5rem",
+              width: "100%",
+            }}
+          >
+            <motion.div variants={item}>
+              <CustomTextField
+                id="email"
                 label="E-mail"
                 variant="filled"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                sx={{ width: "100%" }}
+                sx={{
+                  width: "100%",
+                  "& .MuiFilledInput-root": {
+                    backgroundColor: primaryColorTransparent,
+                    borderColor: primaryColor,
+                    "&:hover": {
+                      backgroundColor: primaryColorTransparent,
+                      border: "1px solid",
+                      borderColor: primaryColorHover,
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: primaryColorTransparent,
+                      boxShadow: `${primaryColor} 2px 2px 15px`,
+                      borderColor: primaryColorHover,
+                    },
+                  },
+                }}
               />
-              <DuckieTextField
-                label="Senha"
+            </motion.div>
+            <motion.div variants={item}>
+              <CustomTextField
+                label="password"
                 type="password"
                 variant="filled"
-                sx={{ width: "100%" }}
                 onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={handleKeyDown} // Adiciona o evento de teclado
+                onKeyDown={handleKeyDown}
+                sx={{
+                  width: "100%",
+                  "& .MuiFilledInput-root": {
+                    backgroundColor: primaryColorTransparent,
+                    borderColor: primaryColor,
+                    "&:hover": {
+                      backgroundColor: primaryColorTransparent,
+                      border: "1px solid",
+                      borderColor: primaryColorHover,
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: primaryColorTransparent,
+                      boxShadow: `${primaryColor} 2px 2px 15px`,
+                      borderColor: primaryColorHover,
+                    },
+                  },
+                }}
               />
+            </motion.div>
+            <motion.div variants={item}>
               <Button
-                variant="text"
+                variant="contained"
                 onClick={handleLogin}
                 sx={{
                   width: "100%",
-                  background: "#5A79D6",
                   padding: ".8rem",
                   borderRadius: "1.2rem",
+                  border: "1px solid",
+                  borderColor: primaryColorHover,
                   textTransform: "capitalize",
                   color: "#FFF",
+                  background: primaryColorHover,
                   "&:hover": {
-                    background: "#2947A3",
+                    background: primaryColor,
+                    border: "1px solid",
+                    borderColor: primaryColorHover,
+                    boxShadow: "none",
                   },
                 }}
               >
-                Login
+                Entrar
               </Button>
-              <Box sx={{ padding: ".5rem 0rem" }}>
+            </motion.div>
+            <motion.div variants={item}>
+              <Box sx={{ padding: ".5rem 0", textAlign: "center" }}>
                 <Typography variant="body1">
                   Não tem uma conta?
                   <Link to="/register">
-                    <Button variant="text" sx={{ textTransform: "none" }}>
+                    <Button
+                      variant="text"
+                      sx={{ textTransform: "none", color: primaryColorHover }}
+                    >
                       Registre-se
                     </Button>
                   </Link>
                 </Typography>
               </Box>
-            </Box>
-          </Box>
-        </Box>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </Container>
-    </React.Fragment>
+    </Box>
   );
 }
