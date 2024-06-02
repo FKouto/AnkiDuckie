@@ -1,11 +1,9 @@
-// Importações de bibliotecas React e utilitários
 import React, { useState, useEffect } from "react";
+// Router DOM
 import { useNavigate } from "react-router-dom";
-
-// Edição do texto devolvido pelo Gemini
+// Formatação do Texto
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-
 // Importações do MUI
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -16,20 +14,12 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Alert from "@mui/material/Alert";
-
-// Importação de estilos
-import "../style.css";
-
-// Importações de componentes personalizados
-import ColorsUse from "../components/colors";
-
-// Importações de ícones
-const Random = require("../assets/icons/random.svg").ReactComponent;
-const MakeQuestion = require("../assets/icons/makeQuestion.svg").ReactComponent;
-const ArrowBack = require("../assets/icons/arrowBack.svg").ReactComponent;
-const PenMagic = require("../assets/icons/penMagic.svg").ReactComponent;
-const Search = require("../assets/icons/search.svg").ReactComponent;
-
+// Animação
+import { motion } from "framer-motion";
+// Icons
+import HugeIcons from "../assets/icons/HugeIcons";
+// Cores
+import ColorsUse from "../components/Colors/Colors";
 // Componente de botão estilizado
 const StyledButton = ({ children, onClick, sx }) => (
   <Button
@@ -48,11 +38,22 @@ const StyledButton = ({ children, onClick, sx }) => (
   </Button>
 );
 
-export default function GeminiPage() {
-  // Inicializações e estados
-  const navigate = useNavigate();
+export default function ChabotPage() {
+  // Icones
+  const {
+    BookmarkAdd02Icon,
+    Navigation03Icon,
+    AiIdeaIcon,
+    AiSearchIcon,
+    AtomicPowerIcon,
+    ArrowLeft01Icon,
+    SquareArrowUpRight02Icon,
+  } = HugeIcons();
+  // Cores
   const { primaryColor, primaryColorHover, primaryColorTransparent } =
     ColorsUse();
+  // Inicializações e estados
+  const navigate = useNavigate();
 
   const [err, setErr] = useState("");
   const [success, setSuccess] = useState("");
@@ -248,7 +249,8 @@ export default function GeminiPage() {
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
+        overflow: "hidden !important",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
@@ -259,7 +261,6 @@ export default function GeminiPage() {
         className="search-result"
         sx={{
           height: "100%",
-          width: "80%",
           margin: "auto",
           marginTop: "1rem",
           overflowY: "scroll",
@@ -291,125 +292,133 @@ export default function GeminiPage() {
 
       {/* Prompt Section */}
       <Box sx={{ height: "fit-content" }}>
-        <Box
-          className="prompt"
-          style={{ display: showPrompt ? "block" : "none" }}
-          sx={{
-            padding: "1rem",
-            width: { xs: "100%", md: "40vw" },
-            margin: "auto",
+        <motion.div
+          initial={{ translateY: "100%", scale: 0 }}
+          animate={{ translateY: "0%", scale: 1 }}
+          transition={{
+            ease: "linear",
+            duration: 0.5,
           }}
         >
           <Box
+            className="prompt"
+            style={{ display: showPrompt ? "block" : "none" }}
             sx={{
-              background: primaryColorTransparent,
-              padding: ".5rem",
-              borderRadius: "2rem",
-              border: "1px solid",
-              borderColor: primaryColorHover,
+              padding: "1rem",
+              width: { xs: "-webkit-fill-available", md: "40vw" },
+              margin: "auto",
             }}
           >
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <StyledButton
-                className="surprise"
-                onClick={surprise}
-                size="small"
-                sx={{
-                  background: primaryColorHover,
-                  "&:hover": {
-                    background: primaryColor,
-                  },
-                }}
-              >
-                <Random />
-                Surpresa
-              </StyledButton>
-              <Button
-                disabled={!chatEstanciado}
-                onClick={handleShowMakeQuestion}
-                size="small"
-                sx={{
-                  textTransform: "capitalize",
-                  color: "white",
-                  padding: ".3rem",
-                  margin: ".3rem",
-                  minWidth: "fit-content",
-                  borderRadius: ".8rem",
-                  background: primaryColorHover,
-                  "&:hover": {
-                    background: primaryColor,
-                  },
-                }}
-              >
-                <MakeQuestion />
-                Criar
-              </Button>
-            </Box>
             <Box
               sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
+                background: primaryColorTransparent,
                 padding: ".5rem",
-                alignItems: "center",
-                border: "1.2px solid #DEE2E6",
-                borderRadius: "5rem",
-                background: "white",
+                borderRadius: "2rem",
+                border: "1px solid",
+                borderColor: primaryColorHover,
               }}
             >
-              <Box sx={{ paddingRight: ".5rem" }}>
-                <Search style={{ color: primaryColorHover }} />
-              </Box>
-              <Box sx={{ width: "100%" }}>
-                <TextField
-                  placeholder="Pesquisar..."
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  fullWidth
-                  multiline
-                  maxRows={2}
-                  variant="standard"
-                  InputProps={{
-                    disableUnderline: true,
-                  }}
-                  sx={{
-                    "& .MuiInputBase-inputMultiline": {
-                      "&::-webkit-scrollbar": {
-                        width: "3px",
-                      },
-                      "&::-webkit-scrollbar-track": {
-                        backgroundColor: "#f1f1f1",
-                      },
-                      "&::-webkit-scrollbar-thumb": {
-                        backgroundColor: primaryColor,
-                        borderRadius: "4px",
-                      },
-                      "&::-webkit-scrollbar-thumb:hover": {
-                        backgroundColor: primaryColorHover,
-                      },
-                    },
-                  }}
-                />
-              </Box>
-              <Box sx={{ paddingLeft: ".5rem" }}>
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <StyledButton
                   className="surprise"
-                  onClick={getResponse}
+                  onClick={surprise}
                   size="small"
                   sx={{
-                    padding: "10px",
                     background: primaryColorHover,
                     "&:hover": {
                       background: primaryColor,
                     },
                   }}
                 >
-                  <PenMagic />
+                  <AiIdeaIcon />
+                  Surpresa
                 </StyledButton>
+                <Button
+                  disabled={!chatEstanciado}
+                  onClick={handleShowMakeQuestion}
+                  size="small"
+                  sx={{
+                    textTransform: "capitalize",
+                    color: "white",
+                    padding: ".3rem",
+                    margin: ".3rem",
+                    minWidth: "fit-content",
+                    borderRadius: ".8rem",
+                    background: primaryColorHover,
+                    "&:hover": {
+                      background: primaryColor,
+                    },
+                  }}
+                >
+                  <AtomicPowerIcon />
+                  Criar
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  padding: ".5rem",
+                  alignItems: "center",
+                  border: "1.2px solid #DEE2E6",
+                  borderRadius: "5rem",
+                  background: "white",
+                }}
+              >
+                <Box sx={{ paddingRight: ".5rem" }}>
+                  <AiSearchIcon style={{ color: primaryColorHover }} />
+                </Box>
+                <Box sx={{ width: "100%" }}>
+                  <TextField
+                    placeholder="Pesquisar..."
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    fullWidth
+                    multiline
+                    maxRows={2}
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-inputMultiline": {
+                        "&::-webkit-scrollbar": {
+                          width: "3px",
+                        },
+                        "&::-webkit-scrollbar-track": {
+                          backgroundColor: "#f1f1f1",
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                          backgroundColor: primaryColor,
+                          borderRadius: "4px",
+                        },
+                        "&::-webkit-scrollbar-thumb:hover": {
+                          backgroundColor: primaryColorHover,
+                        },
+                      },
+                    }}
+                  />
+                </Box>
+                <Box sx={{ paddingLeft: ".5rem" }}>
+                  <StyledButton
+                    className="surprise"
+                    onClick={getResponse}
+                    size="small"
+                    sx={{
+                      padding: "10px",
+                      background: primaryColorHover,
+                      "&:hover": {
+                        background: primaryColor,
+                      },
+                    }}
+                  >
+                    <Navigation03Icon />
+                  </StyledButton>
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </motion.div>
 
         {/* Create Questions Section */}
         <Box
@@ -417,7 +426,7 @@ export default function GeminiPage() {
           style={{ display: showMakeQuestion ? "block" : "none" }}
           sx={{
             padding: "1rem",
-            width: { xs: "100%", md: "40vw" },
+            width: { xs: "-webkit-fill-available", md: "40vw" },
             margin: "auto",
           }}
         >
@@ -443,12 +452,12 @@ export default function GeminiPage() {
                 },
               }}
             >
-              <ArrowBack style={{ color: "#FFF" }} />
+              <ArrowLeft01Icon style={{ color: "#FFF" }} />
             </StyledButton>
 
             <Box
               sx={{
-                width: "100%",
+                width: "-webkit-fill-available",
                 display: "flex",
                 flexDirection: "column",
                 padding: ".8rem",
@@ -502,8 +511,8 @@ export default function GeminiPage() {
                   },
                 }}
               >
-                Gerar Perguntas & Respostas
-                <PenMagic />
+                Criar Perguntas &nbsp;
+                <AtomicPowerIcon />
               </StyledButton>
               <Button
                 disabled={!gerouPerguntas}
@@ -522,8 +531,8 @@ export default function GeminiPage() {
                   },
                 }}
               >
-                Próximo
-                <PenMagic />
+                Próximo &nbsp;
+                <SquareArrowUpRight02Icon />
               </Button>
             </Box>
           </Box>
@@ -535,7 +544,7 @@ export default function GeminiPage() {
           style={{ display: showSendQuestion ? "block" : "none" }}
           sx={{
             padding: "1rem",
-            width: { xs: "100%", md: "40vw" },
+            width: { xs: "-webkit-fill-available", md: "40vw" },
             margin: "auto",
           }}
         >
@@ -574,12 +583,12 @@ export default function GeminiPage() {
                 },
               }}
             >
-              <ArrowBack style={{ color: "#FFF" }} />
+              <ArrowLeft01Icon style={{ color: "#FFF" }} />
             </StyledButton>
 
             <Box
               sx={{
-                width: "100%",
+                width: "-webkit-fill-available",
                 display: "flex",
                 flexDirection: "column",
                 padding: ".8rem",
@@ -630,8 +639,8 @@ export default function GeminiPage() {
                   },
                 }}
               >
-                Enviar
-                <PenMagic />
+                Salvar &nbsp;
+                <BookmarkAdd02Icon />
               </StyledButton>
             </Box>
           </Box>

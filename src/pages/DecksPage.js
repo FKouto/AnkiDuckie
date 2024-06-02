@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
+// Axios (Comunicação Backend)
 import axios from "axios";
-import { Typography, CircularProgress, Box } from "@mui/material";
-import DeckComponent from "../components/Deck";
+// MUI UI
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+// Components
+import DeckLayout from "../components/DeckLayout";
 
-export default function DeckPage() {
+export default function DecksPage() {
   const [deckSummary, setDeckSummary] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -85,35 +90,16 @@ export default function DeckPage() {
   }, []);
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
 
-  return (
-    <Box
-      sx={{
-        height: "100vh",
-        padding: "1rem",
-        overflowY: "scroll",
-        "&::-webkit-scrollbar": {
-          width: "0px", // Largura do scrollbar
-        },
-        "&::-webkit-scrollbar-track": {
-          backgroundColor: "#f1f1f1", // Cor do fundo do track
-        },
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: primaryColor, // Cor do thumb
-          borderRadius: "4px", // Borda arredondada do thumb
-        },
-        "&::-webkit-scrollbar-thumb:hover": {
-          backgroundColor: primaryColorHover, // Cor do thumb quando hover
-        },
-      }}
-    >
-      <DeckComponent deckSummary={deckSummary} />
-    </Box>
-  );
+  return <DeckLayout deckSummary={deckSummary} />;
 }
