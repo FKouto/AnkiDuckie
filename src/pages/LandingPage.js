@@ -33,7 +33,7 @@ export default function LandingPage() {
     <Box sx={{ height: "100vh" }}>
       <Header />
       <Container
-        maxWidth="xl"
+        maxWidth="100vh"
         component="section"
         sx={{
           height: "fit-content",
