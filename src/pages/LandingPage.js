@@ -28,6 +28,7 @@ import {
   Card_16,
 } from "../assets/images/DecksExport";
 import "../style/style.css";
+
 // Array de objetos contendo os componentes dos cards e suas respectivas classes CSS
 const cardsFirstRow = [
   { Component: Card_1, className: "Card-Column-1" },
@@ -53,6 +54,11 @@ const cardsSecondRow = [
 export default function LandingPage() {
   const scrollRef = useRef(null);
   const [scrollDirection, setScrollDirection] = useState(1); // 1 para a direita, -1 para a esquerda
+
+  // Adicionando o useEffect para remover o token do localStorage
+  useEffect(() => {
+    localStorage.removeItem('token');
+  }, []);
 
   useEffect(() => {
     const scrollElement = scrollRef.current;
@@ -105,6 +111,7 @@ export default function LandingPage() {
       return () => clearInterval(intervalId);
     }
   }, [scrollDirectionRight]);
+
   return (
     <Box sx={{ height: "100vh" }}>
       <Container

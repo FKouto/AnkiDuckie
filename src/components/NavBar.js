@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import ColorsUse from "./Colors/Colors";
 import HugeIcons from "../assets/icons/HugeIcons";
 import ProfileModal from "./Profile"; // Importe o seu modal
-const { DashboardSquare02Icon, AiChat02Icon, LicenseDraftIcon } = HugeIcons();
+const { DashboardSquare02Icon, AiChat02Icon, LicenseDraftIcon, LogoutSquare02Icon } = HugeIcons();
 
 const navLinks = [
   { icon: <DashboardSquare02Icon />, path: "/home" },
   { icon: <AiChat02Icon />, path: "/chat" },
   { icon: <LicenseDraftIcon />, path: "/new" },
+  { icon: <LogoutSquare02Icon />, path: "/" },
 ];
 
 const Navbar = () => {
