@@ -107,163 +107,179 @@ export default function LandingPage() {
   }, [scrollDirectionRight]);
   return (
     <Box sx={{ height: "100vh" }}>
-      <Header />
       <Container
         maxWidth="100vh"
-        component="section"
         sx={{
-          height: "fit-content",
-          overflow: "hidden",
-          position: "absolute",
-          top: "50%",
-          left: "0%",
-          width: "100%",
-          textAlign: "center",
-          transform: "translateY( -50% )",
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
           paddingLeft: "0px !important",
           paddingRight: "0px !important",
+          gap: ".5rem",
+          boxSizing: "border-box", // Garantir que padding seja incluído no cálculo da altura total
         }}
       >
-        <Grid container spacing={2}>
-          <Grid item xs={12} sx={{ padding: ".5rem" }}>
-            <Typography
-              variant="h2"
-              component="h2"
-              sx={{
-                fontFamily: '"Plus Jakarta Sans", "Poppins", sans-serif',
-                fontWeight: 600,
-                lineHeight: "normal",
-                textAlign: "center",
-              }}
-            >
-              Aprenda com flashcards,
-              <br /> estude menos!
-            </Typography>
-            <Typography
-              variant="h6"
-              component="h6"
-              sx={{
-                fontWeight: 500,
-                lineHeight: "normal",
-                textAlign: "center",
-              }}
-              gutterBottom
-            >
-              Esqueça o medo das provas e aprenda idiomas com facilidade! <br />
-              A repetição espaçada, com comprovação científica, é a sua aliada.
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Grid container spacing={2} className="ContainerCards-1">
-              <Grid
-                item
-                xs={12}
+        <Box
+          sx={{
+            flexGrow: 1,
+            width: "-webkit-fill-available",
+            height: "fit-content",
+            alignContent: "center",
+          }}
+        >
+          <Header />
+        </Box>
+        <Box
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            flexGrow: 1,
+            width: "-webkit-fill-available",
+            height: "-webkit-fill-available",
+          }}
+        >
+          <Grid container spacing={2} sx={{ marginTop: "0px !important" }}>
+            <Grid item xs={12} sx={{ padding: ".5rem" }}>
+              <Typography
+                variant="h2"
+                component="h2"
                 sx={{
-                  width: "fit-content",
-                  display: "grid",
-                  gridTemplateColumns: "repeat(8, 300px)",
-                  gap: "2rem",
-                  paddingBottom: "0.5rem",
-                  overflowX: "scroll",
-                  overflowY: "hidden",
-                  /* Estilo geral para a barra de rolagem */
-                  "::-webkit-scrollbar": {
-                    width: "0px" /* Largura da barra de rolagem vertical */,
-                    height: "0px" /* Altura da barra de rolagem horizontal */,
-                  },
-
-                  /* Fundo da barra de rolagem */
-                  "::-webkit-scrollbar-track": {
-                    background: "transparent",
-                  },
-
-                  /* Polegar da barra de rolagem */
-                  "::-webkit-scrollbar-thumb": {
-                    background: "transparent",
-                  },
-
-                  /* Polegar da barra de rolagem ao passar o mouse */
-                  "::-webkit-scrollbar-thumb:hover": {
-                    background: "transparent",
-                  },
+                  fontFamily: '"Plus Jakarta Sans", "Poppins", sans-serif',
+                  fontWeight: 600,
+                  lineHeight: "normal",
+                  textAlign: "center",
                 }}
-                ref={scrollRefRight}
               >
-                {cardsFirstRow.map(({ Component, className }, index) => (
-                  <motion.a
-                    key={index}
-                    whileHover={{ scale: 1.1 }}
-                    onHoverStart={(e) => {}}
-                    onHoverEnd={(e) => {}}
-                    sx={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Component
-                      className={className}
-                      style={{ height: "fit-content", width: "100%" }}
-                    />
-                  </motion.a>
-                ))}
-              </Grid>
-              <Grid
-                item
-                xs={12}
+                Aprenda com flashcards,
+                <br /> estude menos!
+              </Typography>
+              <Typography
+                variant="h6"
+                component="h6"
                 sx={{
-                  width: "fit-content",
-                  display: { xs: "none", sm: "grid" },
-                  gridTemplateColumns: "repeat(8, 300px)",
-                  gap: "2rem",
-                  paddingBottom: "0.5rem",
-                  overflowX: "scroll",
-                  overflowY: "hidden",
-                  /* Estilo geral para a barra de rolagem */
-                  "::-webkit-scrollbar": {
-                    width: "0px" /* Largura da barra de rolagem vertical */,
-                    height: "0px" /* Altura da barra de rolagem horizontal */,
-                  },
-
-                  /* Fundo da barra de rolagem */
-                  "::-webkit-scrollbar-track": {
-                    background: "transparent",
-                  },
-
-                  /* Polegar da barra de rolagem */
-                  "::-webkit-scrollbar-thumb": {
-                    background: "transparent",
-                  },
-
-                  /* Polegar da barra de rolagem ao passar o mouse */
-                  "::-webkit-scrollbar-thumb:hover": {
-                    background: "transparent",
-                  },
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                  textAlign: "center",
                 }}
-                ref={scrollRef}
+                gutterBottom
               >
-                {cardsSecondRow.map(({ Component, className }, index) => (
-                  <motion.a
-                    key={index}
-                    whileHover={{ scale: 1.1 }}
-                    onHoverStart={(e) => {}}
-                    onHoverEnd={(e) => {}}
-                    sx={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Component
-                      className={className}
-                      style={{ height: "fit-content", width: "100%" }}
-                    />
-                  </motion.a>
-                ))}
+                Esqueça o medo das provas e aprenda idiomas com facilidade!{" "}
+                <br />A repetição espaçada, com comprovação científica, é a sua
+                aliada.
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={2} className="ContainerCards-1">
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    width: "fit-content",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(8, 300px)",
+                    gap: "2rem",
+                    paddingBottom: "0.5rem",
+                    overflowX: "scroll",
+                    overflowY: "hidden",
+                    /* Estilo geral para a barra de rolagem */
+                    "::-webkit-scrollbar": {
+                      width: "0px" /* Largura da barra de rolagem vertical */,
+                      height: "0px" /* Altura da barra de rolagem horizontal */,
+                    },
+
+                    /* Fundo da barra de rolagem */
+                    "::-webkit-scrollbar-track": {
+                      background: "transparent",
+                    },
+
+                    /* Polegar da barra de rolagem */
+                    "::-webkit-scrollbar-thumb": {
+                      background: "transparent",
+                    },
+
+                    /* Polegar da barra de rolagem ao passar o mouse */
+                    "::-webkit-scrollbar-thumb:hover": {
+                      background: "transparent",
+                    },
+                  }}
+                  ref={scrollRefRight}
+                >
+                  {cardsFirstRow.map(({ Component, className }, index) => (
+                    <motion.a
+                      key={index}
+                      whileHover={{ scale: 1.1 }}
+                      onHoverStart={(e) => {}}
+                      onHoverEnd={(e) => {}}
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Component
+                        className={className}
+                        style={{ height: "fit-content", width: "100%" }}
+                      />
+                    </motion.a>
+                  ))}
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    width: "fit-content",
+                    display: { xs: "none", sm: "grid" },
+                    gridTemplateColumns: "repeat(8, 300px)",
+                    gap: "2rem",
+                    paddingBottom: "0.5rem",
+                    overflowX: "scroll",
+                    overflowY: "hidden",
+                    /* Estilo geral para a barra de rolagem */
+                    "::-webkit-scrollbar": {
+                      width: "0px" /* Largura da barra de rolagem vertical */,
+                      height: "0px" /* Altura da barra de rolagem horizontal */,
+                    },
+
+                    /* Fundo da barra de rolagem */
+                    "::-webkit-scrollbar-track": {
+                      background: "transparent",
+                    },
+
+                    /* Polegar da barra de rolagem */
+                    "::-webkit-scrollbar-thumb": {
+                      background: "transparent",
+                    },
+
+                    /* Polegar da barra de rolagem ao passar o mouse */
+                    "::-webkit-scrollbar-thumb:hover": {
+                      background: "transparent",
+                    },
+                  }}
+                  ref={scrollRef}
+                >
+                  {cardsSecondRow.map(({ Component, className }, index) => (
+                    <motion.a
+                      key={index}
+                      whileHover={{ scale: 1.1 }}
+                      onHoverStart={(e) => {}}
+                      onHoverEnd={(e) => {}}
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Component
+                        className={className}
+                        style={{ height: "fit-content", width: "100%" }}
+                      />
+                    </motion.a>
+                  ))}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );

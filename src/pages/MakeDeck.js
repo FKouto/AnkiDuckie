@@ -24,12 +24,7 @@ export default function MakeDeckPage() {
   // Custom Components
   const { CustomButtonContained } = ButtonsCustom();
   // Icons
-  const {
-    AlignSelectionIcon,
-    CheckmarkSquare04Icon,
-    Delete02Icon,
-    AddSquareIcon,
-  } = HugeIcons();
+  const { SelectionIcon, SelectedIcon, LixeiraIcon, AddIcon } = HugeIcons();
   const [success, setSuccess] = useState("");
   const [err, setErr] = useState("");
   const navigate = useNavigate();
@@ -394,11 +389,9 @@ export default function MakeDeckPage() {
                     </Box>
                     <Box flex={1} marginLeft={1}>
                       <Checkbox
-                        icon={
-                          <AlignSelectionIcon style={{ color: "#2a2e34" }} />
-                        }
+                        icon={<SelectionIcon style={{ color: "#2a2e34" }} />}
                         checkedIcon={
-                          <CheckmarkSquare04Icon style={{ color: "#3a5a40" }} />
+                          <SelectedIcon style={{ color: "#3a5a40" }} />
                         }
                         name={`${i}_${index}`}
                         checked={question.correctAnswer === i}
@@ -419,7 +412,7 @@ export default function MakeDeckPage() {
                         onClick={() => removeResponse(index, i)}
                         disabled={question.responses.length <= 2}
                       >
-                        <Delete02Icon style={{ color: "#250902" }} />
+                        <LixeiraIcon style={{ color: "#250902" }} />
                       </CustomButtonContained>
                     </Box>
                   </Box>
@@ -440,7 +433,7 @@ export default function MakeDeckPage() {
                     },
                   }}
                 >
-                  Resposta &nbsp; <AddSquareIcon />
+                  Resposta &nbsp; <AddIcon />
                 </CustomButtonContained>
               </Box>
             </Box>
@@ -462,7 +455,7 @@ export default function MakeDeckPage() {
               },
             }}
           >
-            Pergunta &nbsp; <AddSquareIcon />
+            Pergunta &nbsp; <AddIcon />
           </CustomButtonContained>
           {deckData.questions.length > 1 && (
             <CustomButtonContained
@@ -478,7 +471,7 @@ export default function MakeDeckPage() {
                 },
               }}
             >
-              Remover &nbsp; <Delete02Icon />
+              Remover &nbsp; <LixeiraIcon />
             </CustomButtonContained>
           )}
           <CustomButtonContained

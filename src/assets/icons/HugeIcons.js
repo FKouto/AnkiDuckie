@@ -343,7 +343,8 @@ export default function HugeIcons() {
     </svg>
   );
   // Manual Deck
-  const AlignSelectionIcon = (props) => (
+  // Checkbox Vazia
+  const SelectionIcon = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -381,7 +382,8 @@ export default function HugeIcons() {
       />
     </svg>
   );
-  const CheckmarkSquare04Icon = (props) => (
+  // Checkbox Selecinada
+  const SelectedIcon = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -405,7 +407,8 @@ export default function HugeIcons() {
       />
     </svg>
   );
-  const AddSquareIcon = (props) => (
+  // Adicionar
+  const AddIcon = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -429,7 +432,7 @@ export default function HugeIcons() {
     </svg>
   );
   // Lixeira
-  const Delete02Icon = (props) => (
+  const LixeiraIcon = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -520,6 +523,7 @@ export default function HugeIcons() {
       />
     </svg>
   );
+  // Tela Normal
   const NormalScreen = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -538,6 +542,7 @@ export default function HugeIcons() {
       />
     </svg>
   );
+  //Fechar Deck
   const CloseDeck = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -563,6 +568,7 @@ export default function HugeIcons() {
       />
     </svg>
   );
+  // Fazer de novo
   const ToRedoDeck = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -602,10 +608,10 @@ export default function HugeIcons() {
     AtomicPowerIcon,
     BookmarkAdd02Icon,
     LicenseDraftIcon,
-    AlignSelectionIcon,
-    CheckmarkSquare04Icon,
-    Delete02Icon,
-    AddSquareIcon,
+    SelectionIcon,
+    SelectedIcon,
+    LixeiraIcon,
+    AddIcon,
     ProfileIcon,
     FullScreen,
     NormalScreen,
