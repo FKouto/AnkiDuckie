@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // Router DOM
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 // Formatação do Texto
 import { marked } from "marked";
 import DOMPurify from "dompurify";
@@ -116,27 +117,26 @@ export default function ChabotPage() {
   // Funções assíncronas para interações com API
   const getResponse = async () => {
     if (!value) {
-      setErr("Error! Please ask a question first!");
+      setErr("Insira uma mensagem antes de me enviar. ");
       return;
     }
 
     try {
       const options = {
-        method: "POST",
-        body: JSON.stringify({
-          history: chatHistory,
-          message: value,
-        }),
         headers: {
           "Content-Type": "application/json",
         },
       };
 
-      const response = await fetch(
-        "http://localhost:8080/user/chatbot",
+      const response = await axios.post(
+        "http://localhost:8080/gemini/chatbot",
+        {
+          history: chatHistory,
+          message: value,
+        },
         options
       );
-      const data = await response.text();
+      const data = response.data;
       console.log(data);
 
       setChatHistory((oldChatHistory) => [
@@ -148,7 +148,7 @@ export default function ChabotPage() {
       setValue("");
     } catch (error) {
       console.error(error);
-      setErr("Something went wrong!");
+      setErr("Poxa, algo deu errado. Tente novamente.");
     }
     setChatEstanciado(true);
   };
@@ -157,24 +157,23 @@ export default function ChabotPage() {
     try {
       const token = localStorage.getItem("token");
       const options = {
-        method: "POST",
-        body: JSON.stringify({
-          chatHistory: chatHistory,
-          titleDeck: titleDeck,
-          numQuestions: numQuestions,
-          numAnswers: numAnswers,
-          token: token,
-        }),
         headers: {
           "Content-Type": "application/json",
         },
       };
 
-      const response = await fetch(
-        "http://localhost:8080/user/createDeck",
+      const response = await axios.post(
+        "http://localhost:8080/gemini/createDeck",
+        {
+          chatHistory: chatHistory,
+          titleDeck: titleDeck,
+          numQuestions: numQuestions,
+          numAnswers: numAnswers,
+          token: token,
+        },
         options
       );
-      const data = await response.text();
+      const data = response.data;
       console.log(data);
 
       setChatHistory((oldChatHistory) => [
@@ -183,7 +182,7 @@ export default function ChabotPage() {
       ]);
     } catch (error) {
       console.error(error);
-      setErr("Something went wrong!");
+      setErr("Poxa, algo deu errado. Tente novamente.");
     }
     setGerouPerguntas(true);
   };
@@ -192,21 +191,21 @@ export default function ChabotPage() {
     try {
       const token = localStorage.getItem("token");
       const options = {
-        method: "POST",
-        body: JSON.stringify({
-          titleDeck: titleDeck,
-          chatHistory: chatHistory,
-          token: token,
-        }),
         headers: {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch(
+
+      const response = await axios.post(
         "http://localhost:8080/user/sendDeck",
+        {
+          titleDeck: titleDeck,
+          chatHistory: chatHistory,
+          token: token,
+        },
         options
       );
-      const data = await response.text();
+      const data = response.data;
       console.log(data);
 
       setChatHistory((oldChatHistory) => [
@@ -216,7 +215,7 @@ export default function ChabotPage() {
       navigate("/home");
     } catch (error) {
       console.error(error);
-      setErr("Something went wrong!");
+      setErr("Ops! Algo deu errado, mas não se preocupe é erro nosso.");
     }
   };
 
@@ -318,6 +317,20 @@ export default function ChabotPage() {
                 borderColor: primaryColorHover,
               }}
             >
+              {err && (
+                <Alert
+                  severity="info"
+                  sx={{
+                    fontWeight: "600",
+                    borderRadius: "1rem",
+                    border: "1px solid",
+                    mt: 1,
+                    mb: 1,
+                  }}
+                >
+                  {err}
+                </Alert>
+              )}
               <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <StyledButton
                   className="surprise"
@@ -572,6 +585,19 @@ export default function ChabotPage() {
                 {err}
               </Alert>
             )}
+            {success && (
+              <Alert
+                severity="warning"
+                sx={{
+                  fontWeight: "600",
+                  borderRadius: "1rem",
+                  mt: 1,
+                  mb: 1,
+                }}
+              >
+                {success}
+              </Alert>
+            )}
             <StyledButton
               onClick={handleShowMakeQuestion}
               size="small"
@@ -585,7 +611,6 @@ export default function ChabotPage() {
             >
               <ArrowLeft01Icon style={{ color: "#FFF" }} />
             </StyledButton>
-
             <Box
               sx={{
                 width: "-webkit-fill-available",
