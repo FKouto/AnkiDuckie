@@ -1,1 +1,1 @@
-# AnkiDuckie
+# Anki Duckie
